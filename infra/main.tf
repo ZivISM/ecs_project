@@ -65,7 +65,7 @@ module infrastructure {
         "NGINX_SERVER_NAME" = "sign-now.io"
         "NGINX_ROOT"        = "/usr/share/nginx/html"
       }
-      capabilities_add = ["NET_BIND_SERVICE"]
+      capabilities_add = []
       capabilities_drop = ["NET_RAW"]
       memory_reservation = 100
       health_check = {
@@ -77,6 +77,29 @@ module infrastructure {
         matcher            = "200"
       }
       service_tag = "nginx-service"
+    }
+    api = {
+      name   = "api"
+      image  = "your-api-image:latest"
+      port   = 3000
+      cpu    = 512
+      memory = 1024
+      environment = {
+        "API_KEY" = "your-api-key"
+        "DB_URL"  = "your-db-url"
+      }
+      capabilities_add = []
+      capabilities_drop = ["NET_RAW"]
+      memory_reservation = 256
+      health_check = {
+        path                = "/health"
+        healthy_threshold   = 3
+        unhealthy_threshold = 2
+        timeout            = 10
+        interval           = 15
+        matcher            = "200-399"
+      }
+      service_tag = "api-service"
     }
   }
 

@@ -15,7 +15,7 @@ locals {
   # Calculate container capabilities based on container configs
   container_capabilities = {
     for key, config in var.container_configs : key => {
-      add  = length(config.capabilities_add) > 0 ? config.capabilities_add : ["SYS_ADMIN"]
+      add  = length(config.capabilities_add) > 0 ? config.capabilities_add : []
       drop = length(config.capabilities_drop) > 0 ? config.capabilities_drop : ["MKNOD"]
     }
   }
