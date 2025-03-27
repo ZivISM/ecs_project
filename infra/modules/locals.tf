@@ -95,10 +95,10 @@ locals {
   # Calculate total CPU and memory needed for the task
   task_cpu_memory = {
     for key, config in var.container_configs : key => {
-      # Total CPU = fluent-bit CPU (256) + container CPU
-      cpu = 256 + local.container_cpu_memory[key].cpu
-      # Total memory = fluent-bit memory (512) + container memory + FireLens buffer (50MB)
-      memory = 512 + local.container_cpu_memory[key].memory + 50
+      # For 256 CPU containers, use 512 CPU (0.5 vCPU) and 2GB memory
+      # This ensures we have enough resources for fluent-bit and the container
+      cpu = 512
+      memory = 2048
     }
   }
 }
