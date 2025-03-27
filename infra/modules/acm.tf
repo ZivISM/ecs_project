@@ -25,8 +25,8 @@ resource "aws_route53_record" "wildcard" {
 }
 
 data "aws_alb" "alb" {
-name = "${var.env}-alb"
-depends_on = [time_sleep.alb_delete_delay]
+  name = "${var.env}-alb"
+  depends_on = [time_sleep.alb_loading_delay]
 }
 
 resource "time_sleep" "alb_loading_delay" {

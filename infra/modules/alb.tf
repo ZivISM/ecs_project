@@ -19,13 +19,6 @@ module "alb" {
       ip_protocol = "tcp"
       cidr_ipv4   = "0.0.0.0/0"
     }
-    all_https = {
-      from_port   = 443
-      to_port     = 443
-      ip_protocol = "tcp"
-      description = "HTTPS web traffic"
-      cidr_ipv4   = "0.0.0.0/0"
-    }
   }
   security_group_egress_rules = {
     all = {
@@ -34,23 +27,14 @@ module "alb" {
     }
   }
 
+  # Create a listener for each container
   listeners = {
-    "${var.env}-http-https-redirect" = {
-      port     = 80
+    for key, config in var.container_configs : "${var.env}-${key}" => {
+      port     = config.port
       protocol = "HTTP"
-      redirect = {
-        port        = "443"
-        protocol    = "HTTPS"
-        status_code = "HTTP_301"
-      }
-    }
-    "${var.env}-https" = {
-      port            = 443
-      protocol        = "HTTPS"
-      certificate_arn = module.acm.acm_certificate_arn
 
       forward = {
-        target_group_key = "${var.env}_ecs"
+        target_group_key = "${var.env}_ecs_${key}"
       }
     }
   }

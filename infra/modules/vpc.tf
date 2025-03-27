@@ -51,7 +51,7 @@ module "vpc_endpoints" {
   version = "~> 5.0"
 
   vpc_id             = module.vpc.vpc_id
-  security_group_ids = [module.eks.cluster_security_group_id]
+  security_group_ids = [module.alb.security_group_id]
   
 
   endpoints = {
