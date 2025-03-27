@@ -38,8 +38,9 @@ module "ecs_service" {
   name        = "${var.env}-${each.key}"
   cluster_arn = module.ecs.cluster_arn
 
-  cpu    = each.value.cpu
-  memory = each.value.memory
+  # Use the total CPU and memory needed for the task
+  cpu    = local.task_cpu_memory[each.key].cpu
+  memory = local.task_cpu_memory[each.key].memory
 
   # Enables ECS Exec
   enable_execute_command = true

@@ -91,5 +91,15 @@ locals {
       }
     }
   }
+
+  # Calculate total CPU and memory needed for the task
+  task_cpu_memory = {
+    for key, config in var.container_configs : key => {
+      # Total CPU = fluent-bit CPU (256) + container CPU
+      cpu = 256 + local.container_cpu_memory[key].cpu
+      # Total memory = fluent-bit memory (512) + container memory
+      memory = 512 + local.container_cpu_memory[key].memory
+    }
+  }
 }
 
